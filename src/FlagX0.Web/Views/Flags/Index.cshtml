@@ -1,0 +1,43 @@
+﻿@model FlagIndexViewModel;
+
+@{
+    ViewData["Title"] = "Listado";
+}
+
+<a asp-action="Create" asp-controller="Flags" class="btn btn-primary">
+    Create Flag
+</a>
+
+<table class="table table-hover">
+    <thead class="bg-info">
+        <tr>
+            <th scope="col">Flag Name</th>
+            <th scope="col">Active</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var flag in Model.Flags)
+        {
+            <tr>
+                <th scope="row">@flag.Name</th>
+
+                <td>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" readonly asp-for="@flag.IsEnabled"
+                            type="checkbox" role="switch"/>
+                    </div>
+                </td>
+
+                <td>
+                    <a asp-action="Delete" asp-controller="Flags" asp-route-flagName="@flag.Name" class="btn btn-outline-danger">
+                        <i class="bi bi-archive"></i>
+                    </a>
+                    <a asp-action="@flag.Name" asp-controller="flags" type="button" class="btn btn-outline-primary">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,104 @@
+﻿@model PaginatedFlagIndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<a asp-action="create" asp-controller="flags" class="btn btn-primary">Create Flag</a>
+
+<div class="row">
+    <form asp-action="PaginatedIndex" asp-controller="Flags" method="get" class="row row-cols-lg-auto g-3 align-items-center">
+        <div class="col-12">
+            <label class="visually-hidden" for="InlineFromSearch">
+                Search
+            </label>
+            <div class="input-group">
+                <div class="input-group-text">Search</div>
+                <input type="text" asp-for="Pagination.Search" class="form-control" id="InlineFromSearch" placeholder="Flag Name" />
+            </div>
+        </div>
+        <div class="col-12">
+            <label class="visually-hidden" for="InlineFormSelect">
+                Items per pase
+            </label>
+            <select asp-for="Pagination.PageSize" class="form-control" asp-items="@(new 
+                    SelectList(@Model.SelectOptions))">
+                <option>Items per Page</option>
+            </select>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </form>
+</div>
+
+<table class="table table table-hover table-bordered mt-5">
+    <thead class="table-info">
+        <tr>
+            <th class="text-primary">Flag Name</th>
+            <th class="text-primary">Active</th>
+            <th class="text-primary">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var flag in Model.Pagination.Items)
+        {
+            <tr>
+                <th>@flag.Name</th>
+                <td>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" readonly type="checkbox" asp-for="@flag.IsEnabled" role="switch" />
+                    </div>
+                </td>
+                <td>
+                    <a asp-action="delete" asp-controller="flags" asp-route-flagName="@flag.Name" class="btn btn-outline-danger">
+                        <i class="bi bi-archive"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        @if(Model.Pagination.CurrentPage > 1)
+        {
+            @* Dos formas de hacer los mismo ()*@
+            <li class="page-item">
+                <a class="page-link" asp-action="IndexPaginated" asp-controller="flags" asp-route-search="@Model.Pagination.Search" asp-route-page="@(Model.Pagination.CurrentPage - 1)" asp-route--size="@Model.Pagination.PageSize">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <li class="page-item">
+                <a href="/flags/@(Model.Pagination.CurrentPage - 1)?search=@Model.Pagination.Search&size=@Model.Pagination.PageSize" class="page-link">@(Model.Pagination.CurrentPage - 1)</a>
+            </li>
+        }
+        <li class="page-item">
+            <a class="page" href="#">@Model.Pagination.CurrentPage</a>
+        </li>
+        @{
+            int totalPages = (int)Math.Ceiling(Model.Pagination.TotalItems / (double)Model.Pagination.PageSize);
+
+            if(Model.Pagination.CurrentPage < totalPages)
+            {
+                <li class="page-item">
+                    <a href="@Url.Action("IndexPaginated", "flags", new {
+                        page = Model.Pagination.CurrentPage + 1,
+                        size = Model.Pagination.PageSize,
+                        search = Model.Pagination.Search
+                    })" class="page-link">@(Model.Pagination.CurrentPage + 1)</a>
+                </li>
+            }
+
+            if(Model.Pagination.CurrentPage < totalPages) 
+            {
+                <li class="page-item">
+                    <a href="/flags/@totalPages?search=@Model.Pagination.Search&size=@Model.Pagination.PageSize" class="page-link">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            }
+         }
+    </ul>
+</nav>

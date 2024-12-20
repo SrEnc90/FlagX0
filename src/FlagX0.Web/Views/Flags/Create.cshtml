@@ -1,0 +1,32 @@
+﻿@model FlagViewModel;
+
+@if(!string.IsNullOrWhiteSpace(Model.Error))
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.Error
+    </div>
+}
+
+<form asp-controller="Flags" asp-action="Create" method="post"
+    class="row row-cols-lg-auto g-3 align-items-center">
+
+    <div class="col-12">
+        <label class="visually-hidden" for="flagName">Flag Name</label>
+        <div class="input-group">
+            <div class="input-group-text">Flag Name</div>
+            <input type="text" asp-for="Name" class="form-control"
+            id="inlineFormInputGroupUsername" placeholder="Flag Name"/>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-check form-switch">
+            <input class="form-check-input" asp-for="IsEnabled"
+                type="checkbox" role="switch"/>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Create Flag</button>
+
+    </div>
+</form>

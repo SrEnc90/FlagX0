@@ -1,0 +1,10 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+# OJO: Nos devuelve la token en el headers, ir al tab de headers y copiar desde el "=" hasta antes del ";". Después ir al swagger y pegar el token
+POST https://localhost:7232/account/login
+Content-Type: application/json
+
+{
+  "email": "lovecraft90@outlook.es",
+  "password": "4Sw2g1RoZ^34IPRi" 
+}
+
